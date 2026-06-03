@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Credit Card Fraud Detection</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app">
+      <header class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">Risk analytics</p>
+          <h1>Credit Card Fraud Detection</h1>
+          <p class="subtitle">Analyze transaction signals, calculate fraud risk, and inspect detection modules from one security dashboard.</p>
+        </div>
+        <div class="hero-badge">
+          <span id="liveRisk">0%</span>
+          <small>Current risk</small>
+        </div>
+      </header>
+
+      <section class="metrics" aria-label="Fraud detection metrics">
+        <article>
+          <span>Total transactions</span>
+          <strong id="totalTransactions">0</strong>
+        </article>
+        <article>
+          <span>Flagged frauds</span>
+          <strong id="flaggedCount">0</strong>
+        </article>
+        <article>
+          <span>Average risk</span>
+          <strong id="averageRisk">0%</strong>
+        </article>
+        <article>
+          <span>High-risk amount</span>
+          <strong id="highRiskAmount">₹0</strong>
+        </article>
+      </section>
+
+      <section class="workspace">
+        <section class="panel form-panel">
+          <div class="panel-title">
+            <h2>Check transaction</h2>
+            <button id="sampleBtn" class="ghost-button" type="button">Use sample</button>
+          </div>
+
+          <form id="fraudForm" class="fraud-form">
+            <label>
+              <span>Transaction amount</span>
+              <input id="amount" type="number" min="1" step="1" placeholder="25000" required />
+            </label>
+
+            <div class="form-row">
+              <label>
+                <span>Transaction hour</span>
+                <input id="hour" type="number" min="0" max="23" placeholder="2" required />
+              </label>
+              <label>
+                <span>Failed attempts</span>
+                <input id="attempts" type="number" min="0" max="10" placeholder="0" required />
+              </label>
+            </div>
+
+            <label>
+              <span>Merchant category</span>
+              <select id="category">
+                <option>Grocery</option>
+                <option>Fuel</option>
+                <option>Travel</option>
+                <option>Electronics</option>
+                <option>Jewellery</option>
+                <option>Online Gaming</option>
+                <option>International Purchase</option>
+              </select>
+            </label>
+
+            <div class="form-row">
+              <label>
+                <span>Location match</span>
+                <select id="locationMatch">
+                  <option value="yes">Matches cardholder city</option>
+                  <option value="no">Different city/country</option>
+                </select>
+              </label>
+              <label>
+                <span>Card age</span>
+                <select id="cardAge">
+                  <option value="old">Older than 6 months</option>
+                  <option value="new">New card</option>
+                </select>
+              </label>
+            </div>
+
+            <label class="check-row">
+              <input id="online" type="checkbox" />
+              <span>Online transaction</span>
+            </label>
+
+            <button class="primary-button" type="submit">Analyze risk</button>
+          </form>
+        </section>
+
+        <section class="panel result-panel">
+          <div class="risk-meter" aria-label="Risk score meter">
+            <canvas id="riskChart" width="320" height="210"></canvas>
+            <div class="risk-copy">
+              <strong id="riskScore">0%</strong>
+              <span id="riskLabel">Waiting for transaction</span>
+            </div>
+          </div>
+
+          <div class="reason-box">
+            <h2>Detection reasons</h2>
+            <ul id="reasonList">
+              <li>Submit a transaction to see risk factors.</li>
+            </ul>
+          </div>
+        </section>
+      </section>
+
+      <section class="panel module-panel">
+        <div class="panel-title module-title">
+          <div>
+            <p class="eyebrow">Deep detection modules</p>
+            <h2>Fraud intelligence layers</h2>
+          </div>
+          <span class="module-summary">Live signal scoring</span>
+        </div>
+
+        <div class="module-grid" id="moduleGrid">
+          <article class="module-card" data-module="behavior">
+            <span class="module-icon">01</span>
+            <h3>Behavior Pattern</h3>
+            <p>Checks transaction amount, card age, and normal spending behavior.</p>
+            <strong>0%</strong>
+            <div class="module-bar"><span></span></div>
+          </article>
+          <article class="module-card" data-module="location">
+            <span class="module-icon">02</span>
+            <h3>Geo Location</h3>
+            <p>Detects mismatch between transaction location and cardholder city.</p>
+            <strong>0%</strong>
+            <div class="module-bar"><span></span></div>
+          </article>
+          <article class="module-card" data-module="velocity">
+            <span class="module-icon">03</span>
+            <h3>Velocity Check</h3>
+            <p>Tracks failed attempts and rapid suspicious activity.</p>
+            <strong>0%</strong>
+            <div class="module-bar"><span></span></div>
+          </article>
+          <article class="module-card" data-module="merchant">
+            <span class="module-icon">04</span>
+            <h3>Merchant Risk</h3>
+            <p>Rates high-risk categories like jewellery, gaming, and international spend.</p>
+            <strong>0%</strong>
+            <div class="module-bar"><span></span></div>
+          </article>
+          <article class="module-card" data-module="confidence">
+            <span class="module-icon">05</span>
+            <h3>Model Confidence</h3>
+            <p>Combines all signals into a final decision confidence score.</p>
+            <strong>0%</strong>
+            <div class="module-bar"><span></span></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="panel table-panel">
+        <div class="panel-title">
+          <h2>Recent transaction review</h2>
+          <select id="filter">
+            <option value="all">All transactions</option>
+            <option value="high">High risk only</option>
+            <option value="safe">Safe only</option>
+          </select>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Transaction</th>
+                <th>Category</th>
+                <th>Amount</th>
+                <th>Risk</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="transactionRows"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
